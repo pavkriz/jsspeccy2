@@ -105,3 +105,10 @@
 .jsspeccy .about .licence {
 	font-size: 9pt;
 }
+
+.jsspeccy-no-close .ui-dialog-titlebar-close {
+	display: none;
+}
+
+
+

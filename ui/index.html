@@ -2,11 +2,32 @@
 <html>
 	<head>
 		<title>jsspeccy</title>
+		<link rel="stylesheet" href="jquery-ui.min.css">
 		<link rel="stylesheet" href="jsspeccy.css">
 		<script src="jdataview.js"></script>
+		<!-- production: -->
 		<script src="jsspeccy-core.min.js"></script>
-		
+		<!-- development: -->
+		<!--
+		<script src="../core/jsspeccy.js"></script>
+		<script src="../core/display.js"></script>
+		<script src="../core/io_bus.js"></script>
+		<script src="../core/keyboard.js"></script>
+		<script src="../core/memory.js"></script>
+		<script src="../core/sound.js"></script>
+		<script src="../core/debugger.js"></script>
+		<script src="../build/roms.js"></script>
+		<script src="../build/autoloaders.js"></script>
+		<script src="../core/sna_file.js"></script>
+		<script src="../core/spectrum.js"></script>
+		<script src="../core/tap_file.js"></script>
+		<script src="../core/tzx_file.js"></script>
+		<script src="../core/viewport.js"></script>
+		<script src="../build/z80.js"></script>
+		<script src="../core/z80_file.js"></script>
+		-->
 		<script src="jquery-1.7.2.min.js"></script>
+		<script src="jquery-ui.min.js"></script>
 		<script src="ui.js"></script>
 
 		<style>
@@ -79,6 +100,11 @@
 	<body>
 		<div id="jsspeccy">
 			<div id="jsspeccy-viewport"></div>
+			<div id="debugger" class="debugger" title="Debugger">
+				<button class="debugger-step" disabled="disabled" title="Pause processor to make a single step">Single step</button><br>
+				<pre class="debugger-text">
+				</pre>
+			</div>
 			<ul class="toolbar">
 				<li><button class="stop-start" title="Stop / start">stop / start</button></li>
 				<li><button class="reset" title="Reset the Spectrum">reset</button></li>
@@ -90,7 +116,8 @@
 						<select class="select-model"></select>
 					</div>
 					<div>
-						<label><input type="checkbox" class="autoload-tapes" checked="checked"> Autoload tapes</label>
+						<label><input type="checkbox" class="autoload-tapes" checked="checked"> Autoload tapes</label> <br>
+						<label><input type="checkbox" class="show-debugger"> Show debugger (experimental)</label>
 					</div>
 				</li>
 			</ul>

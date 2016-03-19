@@ -45,6 +45,7 @@ JSSpeccy.UI = function(opts) {
 
 	$('button.reset', toolbar).click(function() {
 		controller.reset();
+		refreshDebugger();
 	});
 
 	var audioButton = $('button.audio', toolbar);
@@ -64,6 +65,39 @@ JSSpeccy.UI = function(opts) {
 	$('button.about', toolbar).click(function() {
 		showPanel('.about');
 	});
+
+	$('input.show-debugger').click(function() {
+		if ($('input.show-debugger', toolbar).is(':checked')) {
+			$('.debugger').dialog("open");
+		} else {
+			$('.debugger').dialog("close");
+		}
+	});
+
+	$('.debugger').dialog({dialogClass: "jsspeccy-no-close", width: 200});
+	$('.debugger').dialog("close");
+
+
+	$('button.debugger-step').click(function() {
+		controller.singleStep();
+	});
+
+	var refreshDebugger = function() {
+		if (!controller.isRunning) {
+			// stopped
+			var debugr = controller.getDebugger();
+			$('.debugger-text').text(debugr.getText());
+			$('.debugger-step').prop('disabled', false);
+		} else {
+			// running (realtime)
+			$('.debugger-text').text("Pause processor to \nmakea single step \nand watch registers.\n ");
+			$('.debugger-step').prop('disabled', true);
+		}
+	};
+
+	controller.onStop.bind(refreshDebugger);
+	controller.onStart.bind(refreshDebugger);
+	refreshDebugger();
 
 	var selectModel = $('select.select-model', toolbar);
 	var modelsById = {};

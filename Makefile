@@ -4,6 +4,8 @@ DIST_FILES=\
 	build/jsspeccy-core.min.js \
 	lib/jdataview.js \
 	lib/jquery-1.7.2.min.js \
+  lib/jquery-ui.min.js \
+  lib/jquery-ui.min.css \
 	ui/index.html \
 	ui/ui.js \
 	ui/jsspeccy.css \
@@ -34,6 +36,7 @@ CORE_JS_FILES=\
 	core/keyboard.js \
 	core/memory.js \
 	core/sound.js \
+	core/debugger.js \
 	build/roms.js \
 	build/autoloaders.js \
 	core/sna_file.js \
@@ -49,7 +52,7 @@ build/jsspeccy-core.min.js: $(CORE_JS_FILES)
 	java -jar compiler.jar \
 		--js=core/jsspeccy.js --js=core/display.js --js=core/io_bus.js --js=core/keyboard.js --js=core/sound.js \
 		--js=core/memory.js --js=build/roms.js --js=build/autoloaders.js --js=core/sna_file.js --js=core/spectrum.js \
-		--js=core/tap_file.js --js=core/tzx_file.js --js=core/viewport.js --js=build/z80.js \
+		--js=core/tap_file.js --js=core/tzx_file.js --js=core/viewport.js --js=build/z80.js --js=core/debugger.js \
 		--js=core/z80_file.js \
 		--js_output_file=build/jsspeccy-core.min.js
 

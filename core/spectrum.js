@@ -37,6 +37,15 @@ JSSpeccy.Spectrum = function(opts) {
 		display: display
 	});
 
+	var debugr = JSSpeccy.Debugger({
+		memory: memory,
+		processor: processor
+	});
+
+	self.getDebugger = function() {
+		return debugr;
+	};
+
 	/* internal state to allow picking up mid-frame (e.g. when loading from a snapshot) */
 	var startNextFrameWithInterrupt = true;
 

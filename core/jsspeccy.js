@@ -74,6 +74,7 @@ function JSSpeccy(container, opts) {
 	/* == Execution state == */
 	self.isDownloading = false;
 	self.isRunning = false;
+	self.isSingleStep = false;
 	self.currentTape = null;
 	var currentModel, spectrum;
 
@@ -257,6 +258,10 @@ function JSSpeccy(container, opts) {
 		}
 	};
 
+	self.getDebugger = function() {
+		return spectrum.getDebugger();
+	};
+
 
 	/* == Timing / main execution loop == */
 	var referenceTime = null;
@@ -284,9 +289,14 @@ function JSSpeccy(container, opts) {
 		var cyclesElapsed = timeElapsed * currentModel.clockSpeed / 1000;
 
 		var framesRun = 0;
-		while (cyclesExecutedSinceReferenceTime < cyclesElapsed) {
+		while ((self.isSingleStep && framesRun == 0)||(cyclesExecutedSinceReferenceTime < cyclesElapsed && !self.isSingleStep)) {
+			var origFrameLength = currentModel.frameLength; // backup frame length (may be modified due to isSingleStep)
+			if (self.isSingleStep) {
+				currentModel.frameLength = spectrum.getDebugger().getProcessor().getTstates() + 1;
+			}
 			spectrum.runFrame();
 			cyclesExecutedSinceReferenceTime += currentModel.frameLength;
+			model.frameLength = origFrameLength; // restore frame length
 			framesRun++;
 			if (framesRun > 2) {
 				/* if we're having to run more than two frames on this iteration, the emulation
@@ -301,7 +311,13 @@ function JSSpeccy(container, opts) {
 			referenceTime += 1000;
 			cyclesExecutedSinceReferenceTime -= currentModel.clockSpeed;
 		}
-		requestAnimationFrame(tick);
+
+		if (self.isSingleStep) {
+			self.isSingleStep = false;
+			self.stop();
+		} else {
+			requestAnimationFrame(tick);
+		}
 	}
 
 	self.onStart = Event();
@@ -320,6 +336,17 @@ function JSSpeccy(container, opts) {
 		self.isRunning = false;
 		updateViewportIcon();
 		self.onStop.trigger();
+	};
+	self.singleStep = function() {
+		if (self.isRunning) return;
+		self.isSingleStep = true;
+		self.isRunning = true;
+		updateViewportIcon();
+		self.onStart.trigger();
+
+		initReferenceTime();
+
+		requestAnimationFrame(tick);
 	};
 	self.reset = function() {
 		spectrum.reset();
